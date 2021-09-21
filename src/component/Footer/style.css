@@ -1,0 +1,16 @@
+.footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-top: 2px solid #ccc;
+  padding: 3.2rem 0 2.4rem;
+}
+
+.footer-text {
+  margin: 0;
+  padding: 0;
+}
+/*# sourceMappingURL=style.css.map */
