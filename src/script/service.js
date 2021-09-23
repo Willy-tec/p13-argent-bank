@@ -1,11 +1,10 @@
 import axios from 'axios';
+import { store } from './store';
 
-//axios.post();
-function service() {
-    console.log('hallo');
-    console.log(process.env.REACT_APP_BACKURL);
-}
 const URL = process.env.REACT_APP_BACKURL;
+const URL_LOGIN = `${URL}/api/v1/user/login`;
+const URL_SIGNUP = `${URL}/api/v1/user/signup`;
+
 /**
  * Log into the backend
  * @param {Object} body //{email: "string", password: "string"}
@@ -14,16 +13,20 @@ const URL = process.env.REACT_APP_BACKURL;
 async function login(body) {
     let response = {};
     await axios
-        .post(`${URL}/api/v1/user/login`, body)
+        .post(URL_LOGIN, body)
         .then((res) => {
-            response.status = res.data.status;
-            response.message = res.data.message;
-            response.token = res.data.body.token;
+            response = {
+                status: res.data.status,
+                message: res.data.message,
+                token: res.data.body.token,
+            };
         })
         .catch((error) => {
             if (error.response) {
-                response.status = error.response.data.status;
-                response.message = error.response.data.message;
+                response = {
+                    status: error.response.data.status,
+                    message: error.response.data.message,
+                };
             } else response = error;
         });
     return response;
@@ -34,9 +37,27 @@ async function login(body) {
  * @param {"email": "string", "password": "string", "firstName": "string", "lastName": "string"}
  * @return {"status": 0, "message": "string", "body": { "id": "string", "email": "string" }}
  */
-function signup() {}
+async function signup(body) {
+    let response = {};
+    await axios
+        .post(URL_SIGNUP, body)
+        .then((res) => {
+            response = {
+                status: res.data.status,
+                message: res.data.message,
+            };
+        })
+        .catch((error) => {
+            if (error.respone) {
+                response = {
+                    status: error.response.data.status,
+                    message: error.response.data.message,
+                };
+            }
+        });
+    return response;
+}
 
 function profile() {}
 
 export { login, signup, profile };
-export default service;

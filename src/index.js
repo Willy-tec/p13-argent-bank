@@ -8,27 +8,35 @@ import Footer from './component/Footer';
 import Transaction from './page/Transaction';
 import Profile from './page/Profile';
 import Login from './page/Login';
+import Signup from './page/Signup';
+import { store } from './script/store';
+import { Provider } from 'react-redux';
 
 ReactDOM.render(
     <React.StrictMode>
-        <Router>
-            <NavBar />
-            <Switch>
-                <Route exact path="/">
-                    <Home />
-                </Route>
-                <Route path="/login">
-                    <Login />
-                </Route>
-                <Route path="/profile">
-                    <Profile />
-                </Route>
-                <Route path="/transaction">
-                    <Transaction />
-                </Route>
-            </Switch>
-            <Footer />
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <NavBar />
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route path="/login">
+                        <Login />
+                    </Route>
+                    <Route path="/profile">
+                        <Profile />
+                    </Route>
+                    <Route path="/transaction">
+                        <Transaction />
+                    </Route>
+                    <Route path="/signup">
+                        <Signup />
+                    </Route>
+                </Switch>
+                <Footer />
+            </Router>
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );

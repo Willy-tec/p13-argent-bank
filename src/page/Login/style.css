@@ -54,4 +54,10 @@
   padding: 5px;
   font-size: 1.92rem;
 }
+
+html a.input-link-signup {
+  display: block;
+  text-align: right;
+  float: right;
+}
 /*# sourceMappingURL=style.css.map */

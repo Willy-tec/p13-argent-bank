@@ -1,34 +1,41 @@
 import './style.css';
-import { login } from '../../script/service';
-import { Redirect } from 'react-router';
+import { signup } from '../../script/service';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
-function Login() {
-    let [redirect, setRedirect] = useState(false);
-
+function Signup() {
+    const [needRedirect, setNeedRedicte] = useState(false);
     function handleSubmit(target) {
         target.preventDefault();
         let body = {
             email: document.forms[0].email.value,
             password: document.forms[0].password.value,
+            name: document.forms[0].name.value,
+            lastname: document.forms[0].lastname.value,
         };
-        login(body).then((response) => {
+        signup(body).then((response) => {
             if (response.status === 200) {
-                console.log('login');
-                setRedirect(true);
+                console.log('user create');
+                setNeedRedicte(true);
             } else if (response.status === 400)
                 console.log('Error, user not found');
         });
     }
-
-    if (redirect) return <Redirect to="/profile" />;
+    if (needRedirect) return <Redirect to="/login" />;
     return (
         <main className="main bg-dark">
             <section className="sign-in-content">
                 <i className="fa fa-user-circle sign-in-icon"></i>
-                <h1>Sign In</h1>
+                <h1>Sign Up</h1>
                 <form onSubmit={handleSubmit}>
+                    <div className="input-wrapper">
+                        <label htmlFor="name">Name</label>
+                        <input type="text" id="name" />
+                    </div>
+                    <div className="input-wrapper">
+                        <label htmlFor="lastname">Lastname</label>
+                        <input type="text" id="lastname" />
+                    </div>
                     <div className="input-wrapper">
                         <label htmlFor="email">Email</label>
                         <input type="text" id="email" />
@@ -37,21 +44,14 @@ function Login() {
                         <label htmlFor="password">Password</label>
                         <input type="password" id="password" />
                     </div>
-                    <Link className="input-link-signup" to="/signup">
-                        Signup
-                    </Link>
-                    <div className="input-remember">
-                        <input type="checkbox" id="remember-me" />
-                        <label htmlFor="remember-me">Remember me</label>
-                    </div>
                     {/* <a href="/profile" className="sign-in-button">
                         Sign In
                     </a> */}
-                    <button className="sign-in-button">Sign In</button>
+                    <button className="sign-in-button">Sign Up</button>
                 </form>
             </section>
         </main>
     );
 }
 
-export default Login;
+export default Signup;
