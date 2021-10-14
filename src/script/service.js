@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { store } from './store';
+import { useDispatch } from 'react-redux';
 
 const URL = process.env.REACT_APP_BACKURL;
 const URL_LOGIN = `${URL}/api/v1/user/login`;
 const URL_SIGNUP = `${URL}/api/v1/user/signup`;
+const URL_PROFILE = `${URL}/api/v1/user/profile`;
 
 /**
  * Log into the backend
@@ -20,6 +22,11 @@ async function login(body) {
                 message: res.data.message,
                 token: res.data.body.token,
             };
+
+            store.dispatch({
+                type: 'setToken',
+                payload: { token: response.token },
+            });
         })
         .catch((error) => {
             if (error.response) {
@@ -58,6 +65,34 @@ async function signup(body) {
     return response;
 }
 
-function profile() {}
+async function profile(body) {
+    let response = {};
+    const config = {
+        headers: {
+            Authorization: `Bearer ${body.token}`,
+        },
+    };
+    await axios
+        .post(URL_PROFILE, {}, config)
+        .then((res) => {
+            response = {
+                status: res.data.status,
+                message: res.data.message,
+                body: res.data.body,
+            };
+        })
+        .catch((error) => {
+            if (error.respone) {
+                response = {
+                    status: error.response.data.status,
+                    message: error.response.data.message,
+                };
+            }
+        });
+    return response;
+}
 
-export { login, signup, profile };
+function update() {}
+export { login, signup, profile, update };
+
+//TODO Save token into cookie+extra info
