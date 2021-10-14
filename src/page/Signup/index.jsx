@@ -10,9 +10,10 @@ function Signup() {
         let body = {
             email: document.forms[0].email.value,
             password: document.forms[0].password.value,
-            name: document.forms[0].name.value,
-            lastname: document.forms[0].lastname.value,
+            firstName: document.forms[0].name.value,
+            lastName: document.forms[0].lastname.value,
         };
+        console.log(body);
         signup(body).then((response) => {
             if (response.status === 200) {
                 console.log('user create');
@@ -44,9 +45,6 @@ function Signup() {
                         <label htmlFor="password">Password</label>
                         <input type="password" id="password" />
                     </div>
-                    {/* <a href="/profile" className="sign-in-button">
-                        Sign In
-                    </a> */}
                     <button className="sign-in-button">Sign Up</button>
                 </form>
             </section>
