@@ -1,17 +1,14 @@
 import './style.css';
-import { login, verifyCookie } from '../../script/service';
+import { login } from '../../script/service';
 import { Redirect } from 'react-router';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import Loader from '../../component/Loader';
+import { useState } from 'react';
 
 function Login() {
-    let [redirect, setRedirect] = useState(false);
-
-    // if (!redirect && verifyCookie()) {
-    //     console.log('verify cookie by !redirect');
-    //     setRedirect(true);
-    // }
+    let [waiting, setWaiting] = useState(false);
+    let connection = useSelector((state) => state.connected);
 
     function handleSubmit(target) {
         target.preventDefault();
@@ -22,13 +19,17 @@ function Login() {
         login(body).then((response) => {
             if (response.status === 200) {
                 console.log('login');
-                setRedirect(true);
-            } else if (response.status === 400)
-                console.log('Error, user not found');
+            } else if (response.status !== 200) {
+                console.log('Error, user not found', response);
+                document.forms[0].lastChild.innerText = response.message; // ['error-text'].value = 'Salut';
+                setWaiting(false);
+            }
         });
+
+        setWaiting(true);
     }
 
-    if (redirect) return <Redirect to="/profile" />;
+    if (connection) return <Redirect to="/profile" />;
     else
         return (
             <main className="main bg-dark">
@@ -51,7 +52,10 @@ function Login() {
                             <input type="checkbox" id="remember-me" />
                             <label htmlFor="remember-me">Remember me</label>
                         </div>
-                        <button className="sign-in-button">Sign In</button>
+                        <button className="sign-in-button">
+                            Sign In {waiting ? <Loader /> : ''}
+                        </button>
+                        <div className="error-message" id="error-text"></div>
                     </form>
                 </section>
             </main>
@@ -59,5 +63,5 @@ function Login() {
 }
 
 export default Login;
-// TODO Effet pour la validation : user not found, waiting.
+// TODO Effet pour la validation : user not found
 //TODO validation formulaire

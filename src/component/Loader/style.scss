@@ -1,0 +1,21 @@
+.loader {
+    width: 15px;
+    height: 15px;
+    border-top: double white 3px;
+    border-bottom: double white 3px;
+    border-right: solid white 3px;
+    border-left: solid white 3px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-left: 1rem;
+    position: absolute;
+    animation: rotating 2s linear infinite;
+}
+@keyframes rotating {
+    from {
+        transform: rotateZ(0);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
+}

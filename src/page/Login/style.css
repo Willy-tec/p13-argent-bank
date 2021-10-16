@@ -1,4 +1,5 @@
 .sign-in-button {
+  position: relative;
   display: block;
   width: 100%;
   padding: 8px;
@@ -59,5 +60,10 @@ html a.input-link-signup {
   display: block;
   text-align: right;
   float: right;
+}
+
+.error-message {
+  position: absolute;
+  font-size: 1.5rem;
 }
 /*# sourceMappingURL=style.css.map */

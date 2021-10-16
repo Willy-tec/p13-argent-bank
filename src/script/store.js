@@ -1,23 +1,23 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    token: 'empty',
     connected: false,
+    profileInfoLoad: false,
     firstName: '',
     lastName: '',
 };
 
 function reducer(state = initialState, action) {
     switch (action.type) {
-        case 'setToken':
-            return {
-                ...state,
-                token: action.payload.token,
-            };
         case 'setConnect':
             return {
                 ...state,
                 connected: action.payload.connected,
+            };
+        case 'setProfileInfoLoad':
+            return {
+                ...state,
+                profileInfoLoad: action.payload.profileInfoLoad,
             };
         case 'setInfo':
             return {
@@ -29,6 +29,7 @@ function reducer(state = initialState, action) {
             return {
                 ...initialState,
             };
+
         default:
             return state;
     }

@@ -13,11 +13,9 @@ import { store } from './script/store';
 import { Provider } from 'react-redux';
 import ErrorPage from './page/ErrorPage';
 import { Redirect } from 'react-router';
+import { isAuthenticate, manageConnection } from './script/connection';
 
-// function isAuthenticate() {
-//     return false;
-// }
-
+manageConnection();
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
@@ -27,18 +25,25 @@ ReactDOM.render(
                     <Route exact path="/">
                         <Home />
                     </Route>
-                    <Route path="/login">
-                        <Login />
-                    </Route>
+                    <Route
+                        path="/login"
+                        render={() => {
+                            return isAuthenticate() ? (
+                                <Redirect to="/profile" />
+                            ) : (
+                                <Login />
+                            );
+                        }}
+                    ></Route>
                     <Route
                         path="/profile"
-                        // render={(props) => {
-                        //     return isAuthenticate() ? (
-                        //         <Profile />
-                        //     ) : (
-                        //         <Redirect to="/Login" />
-                        //     );
-                        // }}
+                        render={() => {
+                            return isAuthenticate() ? (
+                                <Profile />
+                            ) : (
+                                <Redirect to="/login" />
+                            );
+                        }}
                     ></Route>
                     <Route path="/transaction">
                         <Transaction />

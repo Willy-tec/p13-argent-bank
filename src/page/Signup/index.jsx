@@ -14,13 +14,14 @@ function Signup() {
             lastName: document.forms[0].lastname.value,
         };
         console.log(body);
-        signup(body).then((response) => {
-            if (response.status === 200) {
-                console.log('user create');
-                setNeedRedicte(true);
-            } else if (response.status === 400)
-                console.log('Error, user not found');
-        });
+        if (document.forms[0].checkValidity())
+            signup(body).then((response) => {
+                if (response.status === 200) {
+                    console.log('user create');
+                    setNeedRedicte(true);
+                } else if (response.status === 400)
+                    console.log('Error, user not found');
+            });
     }
     if (needRedirect) return <Redirect to="/login" />;
     return (
@@ -31,19 +32,34 @@ function Signup() {
                 <form onSubmit={handleSubmit}>
                     <div className="input-wrapper">
                         <label htmlFor="name">Name</label>
-                        <input type="text" id="name" />
+                        <input
+                            type="text"
+                            id="name"
+                            pattern="[A-Za-z]{2,}"
+                            required
+                        />
                     </div>
                     <div className="input-wrapper">
                         <label htmlFor="lastname">Lastname</label>
-                        <input type="text" id="lastname" />
+                        <input
+                            type="text"
+                            id="lastname"
+                            pattern="[A-Za-z]{2,}"
+                            required
+                        />
                     </div>
                     <div className="input-wrapper">
                         <label htmlFor="email">Email</label>
-                        <input type="text" id="email" />
+                        <input type="email" id="email" required />
                     </div>
                     <div className="input-wrapper">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" />
+                        <input
+                            type="password"
+                            id="password"
+                            pattern=".{8,}"
+                            required
+                        />
                     </div>
                     <button className="sign-in-button">Sign Up</button>
                 </form>

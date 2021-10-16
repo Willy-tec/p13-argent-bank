@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Redirect } from 'react-router';
 import { store } from './store';
 
 const URL = process.env.REACT_APP_BACKURL;
@@ -6,11 +7,6 @@ const URL_LOGIN = `${URL}/api/v1/user/login`;
 const URL_SIGNUP = `${URL}/api/v1/user/signup`;
 const URL_PROFILE = `${URL}/api/v1/user/profile`;
 
-/**
- * Log into the backend
- * @param {Object} body //{email: "string", password: "string"}
- * @return {string} token
- */
 async function login(body) {
     console.log('call to axios login');
     let response = {};
@@ -22,10 +18,10 @@ async function login(body) {
                 message: res.data.message,
                 token: res.data.body.token,
             };
-            setCookie(response.token);
+            setLocalStorage(response.token);
             store.dispatch({
-                type: 'setToken',
-                payload: { token: response.token },
+                type: 'setConnect',
+                payload: { connected: true },
             });
         })
         .catch((error) => {
@@ -34,16 +30,15 @@ async function login(body) {
                     status: error.response.data.status,
                     message: error.response.data.message,
                 };
+                store.dispatch({
+                    type: 'setConnect',
+                    payload: { connected: false },
+                });
             } else response = error;
         });
     return response;
 }
 
-/**
- * Signup a new account
- * @param {"email": "string", "password": "string", "firstName": "string", "lastName": "string"}
- * @return {"status": 0, "message": "string", "body": { "id": "string", "email": "string" }}
- */
 async function signup(body) {
     let response = {};
     console.log('call to axios signup');
@@ -67,13 +62,14 @@ async function signup(body) {
     return response;
 }
 
-async function profile(req) {
+async function profile() {
     let response = {};
-    console.log('call to axios profile with : ', req);
+    let token = getLocalToken();
+    console.log('call to axios profile with : ', token);
 
     const config = {
         headers: {
-            Authorization: `Bearer ${req.token}`,
+            Authorization: `Bearer ${token}`,
         },
     };
     await axios
@@ -84,8 +80,25 @@ async function profile(req) {
                 message: res.data.message,
                 body: res.data.body,
             };
+            store.dispatch({
+                type: 'setInfo',
+                payload: {
+                    lastName: response.body.lastName,
+                    firstName: response.body.firstName,
+                },
+            });
+            store.dispatch({
+                type: 'setProfileInfoLoad',
+                payload: { profileInfoLoad: true },
+            });
+            console.log(store.getState());
         })
         .catch((error) => {
+            console.log('error ocured in catch of profile axios request');
+            store.dispatch({
+                type: 'setProfileInfoLoad',
+                payload: { profileInfoLoad: false },
+            });
             if (error.respone) {
                 response = {
                     status: error.response.data.status,
@@ -98,10 +111,11 @@ async function profile(req) {
 
 async function update(req) {
     console.log('call to axios update');
+    let token = getLocalToken();
 
     const config = {
         headers: {
-            Authorization: `Bearer ${req.token}`,
+            Authorization: `Bearer ${token}`,
         },
     };
     const data = {
@@ -113,34 +127,29 @@ async function update(req) {
     });
 }
 
-function setCookie(token) {
+function setLocalStorage(token) {
     window.localStorage.setItem('token', token);
 }
-function getCookie() {
-    store.dispatch({
-        type: 'setToken',
-        payload: { token: window.localStorage.getItem('token') },
-    });
-}
-function verifyCookie() {
-    let token = window.localStorage.getItem('token');
 
-    if (token) {
-        console.log('cookie exist', token);
-        // if (str === 'empty') {
-        // store.dispatch({
-        //     type: 'setToken',
-        //     payload: { token },
-        // });
-        // }
-        return true;
-    }
-    return false;
+function verifyLocalStorage() {
+    return !!window.localStorage.getItem('token');
+}
+function getLocalToken() {
+    return window.localStorage.getItem('token');
 }
 function clearAll() {
-    window.localStorage.clear();
+    window.localStorage.removeItem('token');
     store.dispatch({ type: 'clearAll' });
+    return <Redirect to="/" />;
 }
-export { login, signup, profile, update, verifyCookie, getCookie, clearAll };
 
-//TODO Save token into cookie+extra info
+export {
+    login,
+    signup,
+    profile,
+    update,
+    verifyLocalStorage,
+    clearAll,
+    setLocalStorage,
+    getLocalToken,
+};
