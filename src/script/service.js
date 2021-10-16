@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { store } from './store';
-import { useDispatch } from 'react-redux';
 
 const URL = process.env.REACT_APP_BACKURL;
 const URL_LOGIN = `${URL}/api/v1/user/login`;
@@ -13,6 +12,7 @@ const URL_PROFILE = `${URL}/api/v1/user/profile`;
  * @return {string} token
  */
 async function login(body) {
+    console.log('call to axios login');
     let response = {};
     await axios
         .post(URL_LOGIN, body)
@@ -22,7 +22,7 @@ async function login(body) {
                 message: res.data.message,
                 token: res.data.body.token,
             };
-
+            setCookie(response.token);
             store.dispatch({
                 type: 'setToken',
                 payload: { token: response.token },
@@ -46,6 +46,8 @@ async function login(body) {
  */
 async function signup(body) {
     let response = {};
+    console.log('call to axios signup');
+
     await axios
         .post(URL_SIGNUP, body)
         .then((res) => {
@@ -65,11 +67,13 @@ async function signup(body) {
     return response;
 }
 
-async function profile(body) {
+async function profile(req) {
     let response = {};
+    console.log('call to axios profile with : ', req);
+
     const config = {
         headers: {
-            Authorization: `Bearer ${body.token}`,
+            Authorization: `Bearer ${req.token}`,
         },
     };
     await axios
@@ -87,12 +91,56 @@ async function profile(body) {
                     status: error.response.data.status,
                     message: error.response.data.message,
                 };
-            }
+            } else console.log(error);
         });
     return response;
 }
 
-function update() {}
-export { login, signup, profile, update };
+async function update(req) {
+    console.log('call to axios update');
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${req.token}`,
+        },
+    };
+    const data = {
+        firstName: req.firstName,
+        lastName: req.lastName,
+    };
+    await axios.put(URL_PROFILE, data, config).then((res) => {
+        if (res.status !== 200) console.log(res.statusText);
+    });
+}
+
+function setCookie(token) {
+    window.localStorage.setItem('token', token);
+}
+function getCookie() {
+    store.dispatch({
+        type: 'setToken',
+        payload: { token: window.localStorage.getItem('token') },
+    });
+}
+function verifyCookie() {
+    let token = window.localStorage.getItem('token');
+
+    if (token) {
+        console.log('cookie exist', token);
+        // if (str === 'empty') {
+        // store.dispatch({
+        //     type: 'setToken',
+        //     payload: { token },
+        // });
+        // }
+        return true;
+    }
+    return false;
+}
+function clearAll() {
+    window.localStorage.clear();
+    store.dispatch({ type: 'clearAll' });
+}
+export { login, signup, profile, update, verifyCookie, getCookie, clearAll };
 
 //TODO Save token into cookie+extra info

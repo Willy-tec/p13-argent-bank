@@ -3,19 +3,17 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px 20px;
-    & a{
-        font-weight: bold;
-        color: #2c3e50;
-    }
     & a.router-link-exact-active {
         color: #42b983;
     }
     &-item {
+        font-weight: bold;
+        color: #2c3e50;
         text-decoration: none;
         margin-right: 0.8rem;
-    &:hover {
-        text-decoration: underline;
-      }
+        &:hover {
+            text-decoration: underline;
+        }
     }
     &-logo {
         display: flex;
@@ -23,12 +21,18 @@
         &-image {
             max-width: 100%;
             width: 200px;
-          }
-      }
+        }
+    }
+    & button {
+        border: none;
+        background-color: unset;
+        font-weight: bold;
+        font-size: 1.6rem;
+        font-family: unset;
+    }
+}
 
-  }
-  
-  .sr-only {
+.sr-only {
     border: 0 !important;
     clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
     -webkit-clip-path: inset(50%) !important;
@@ -40,4 +44,4 @@
     position: absolute !important;
     width: 1px !important;
     white-space: nowrap !important; /* 3 */
-  }
+}

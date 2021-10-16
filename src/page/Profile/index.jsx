@@ -1,37 +1,68 @@
 import './style.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { profile, update } from '../../script/service';
+import { profile, update, verifyCookie, getCookie } from '../../script/service';
 import { Redirect } from 'react-router';
 import { useState } from 'react';
 
 function Profile() {
+    console.log('rendering profile page');
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
     const [redirect, setRedirect] = useState(false);
     const [editMode, setEditMode] = useState(false);
 
-    profile({ token }).then((response) => {
-        if (response.status === 200) {
-            dispatch({ type: 'setConnect', payload: { connected: true } });
-            dispatch({
-                type: 'setInfo',
-                payload: {
-                    lastName: response.body.lastName,
-                    firstName: response.body.firstName,
-                },
-            });
-        } else if (!response.status) setRedirect(true);
-    });
     let firstName = useSelector((state) => state.firstName);
     let lastName = useSelector((state) => state.lastName);
-
     let isConnected = useSelector((state) => state.connected);
+    if (token === 'empty' && verifyCookie()) {
+        getCookie();
+    } else if (token === 'empty') return <Redirect to="/login" />;
+    if (!isConnected && token !== 'empty') {
+        getProfile();
+    }
+
     if (redirect) return <Redirect to="/login" />;
-    function editHandler(ev) {
-        let editValue = editMode;
-        setEditMode(!editValue);
-        console.log(ev.target.id);
-        if (ev.target.id === 'save-button') {
+
+    function getProfile() {
+        profile({ token }).then((response) => {
+            if (response.status === 200) {
+                dispatch({ type: 'setConnect', payload: { connected: true } });
+                dispatch({
+                    type: 'setInfo',
+                    payload: {
+                        lastName: response.body.lastName,
+                        firstName: response.body.firstName,
+                    },
+                });
+            } else if (response.status !== 200) {
+                console.log('response != 200 in getProfile');
+                setRedirect(true);
+            }
+        });
+    }
+
+    function editHandler({ target }) {
+        setEditMode(!editMode);
+        if (target.id === 'save-button') {
+            let request = {
+                token,
+                firstName:
+                    document.forms['form-edit'][
+                        'firstName-input'
+                    ].value.trim() ||
+                    document.forms['form-edit']['firstName-input'].placeholder,
+                lastName:
+                    document.forms['form-edit'][
+                        'lastName-input'
+                    ].value.trim() ||
+                    document.forms['form-edit']['lastName-input'].placeholder,
+            };
+            if (
+                firstName !== request.firstName ||
+                lastName !== request.lastName
+            ) {
+                update(request).then(() => getProfile());
+            }
         }
     }
     if (isConnected)
@@ -40,20 +71,22 @@ function Profile() {
                 <main className="main bg-dark">
                     <div className="header">
                         {editMode ? (
-                            <>
+                            <form id="form-edit">
                                 <h1>
                                     Welcome back
                                     <br />
                                     <input
                                         type="text"
+                                        id="firstName-input"
                                         className="header-inputField"
-                                        size={firstName.length}
+                                        size={10}
                                         placeholder={`${firstName}`}
                                     />
                                     <input
                                         type="text"
+                                        id="lastName-input"
                                         className="header-inputField"
-                                        size={lastName.length}
+                                        size={10}
                                         placeholder={`${lastName}`}
                                     />
                                 </h1>
@@ -71,7 +104,7 @@ function Profile() {
                                 >
                                     Cancel
                                 </button>
-                            </>
+                            </form>
                         ) : (
                             <>
                                 <h1>
@@ -141,7 +174,14 @@ function Profile() {
                 </main>
             </>
         );
-    else return <div>Loading...</div>;
+    else
+        return (
+            <main className="main bg-dark">
+                <div className="header">
+                    <h1>Loading ...</h1>
+                </div>
+            </main>
+        );
 }
 
 export default Profile;

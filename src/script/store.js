@@ -1,8 +1,7 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    message: 'test',
-    token: 'nope',
+    token: 'empty',
     connected: false,
     firstName: '',
     lastName: '',
@@ -10,11 +9,6 @@ const initialState = {
 
 function reducer(state = initialState, action) {
     switch (action.type) {
-        case 'coucou':
-            return {
-                ...state, // TODO Make the initial redux state
-                message: 'coucou mon minou' + action.payload.txt,
-            };
         case 'setToken':
             return {
                 ...state,
@@ -30,6 +24,10 @@ function reducer(state = initialState, action) {
                 ...state,
                 firstName: action.payload.firstName,
                 lastName: action.payload.lastName,
+            };
+        case 'clearAll':
+            return {
+                ...initialState,
             };
         default:
             return state;
