@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './style.css';
 
 function ErrorPage() {
@@ -10,6 +11,7 @@ function ErrorPage() {
                 <h2>404 - PAGE NOT FOUND</h2>
                 <p>The page you are looking for might have been removed</p>
                 <p>had its name changed or is temporarily unavailable</p>
+                <Link to="/">Back to home</Link>
             </section>
         </main>
     );

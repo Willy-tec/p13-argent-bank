@@ -5,7 +5,6 @@ import Home from './page/Home';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import NavBar from './component/NavBar';
 import Footer from './component/Footer';
-import Transaction from './page/Transaction';
 import Profile from './page/Profile';
 import Login from './page/Login';
 import Signup from './page/Signup';
@@ -16,6 +15,7 @@ import { Redirect } from 'react-router';
 import { isAuthenticate, manageConnection } from './script/connection';
 
 manageConnection();
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
@@ -45,9 +45,6 @@ ReactDOM.render(
                             );
                         }}
                     ></Route>
-                    <Route path="/transaction">
-                        <Transaction />
-                    </Route>
                     <Route path="/signup">
                         <Signup />
                     </Route>

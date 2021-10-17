@@ -67,6 +67,24 @@
   font-size: 1.8rem;
 }
 
+.header_dot-1 {
+  opacity: 0;
+  -webkit-animation: fading 2s linear 0s infinite;
+          animation: fading 2s linear 0s infinite;
+}
+
+.header_dot-2 {
+  opacity: 0;
+  -webkit-animation: fading 2s linear 0.25s infinite;
+          animation: fading 2s linear 0.25s infinite;
+}
+
+.header_dot-3 {
+  opacity: 0;
+  -webkit-animation: fading 2s linear 0.5s infinite;
+          animation: fading 2s linear 0.5s infinite;
+}
+
 .transaction-button {
   display: block;
   width: 100%;
@@ -93,6 +111,30 @@
   }
   .transaction-button {
     width: 200px;
+  }
+}
+
+@-webkit-keyframes fading {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fading {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 /*# sourceMappingURL=style.css.map */

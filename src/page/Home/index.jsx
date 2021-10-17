@@ -1,6 +1,5 @@
 import Feature from '../../component/Feature';
 import Hero from '../../component/Hero';
-import './style.css';
 
 function Home() {
     return (

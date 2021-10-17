@@ -6,48 +6,42 @@ import { useState } from 'react';
 import { bankAccount } from '../../mockup/bancAccount';
 
 function Profile() {
-    const token = useSelector((state) => state.token);
-    const dispatch = useDispatch();
     const [editMode, setEditMode] = useState(false);
 
-    let firstName = useSelector((state) => state.firstName);
-    let lastName = useSelector((state) => state.lastName);
-    let isConnected = useSelector((state) => state.connected);
-    let isProfileInfoLoad = useSelector((state) => state.profileInfoLoad);
+    const dispatch = useDispatch();
+
+    const token = useSelector((state) => state.token);
+    const firstName = useSelector((state) => state.firstName);
+    const lastName = useSelector((state) => state.lastName);
+    const isConnected = useSelector((state) => state.connected);
+    const isProfileInfoLoad = useSelector((state) => state.profileInfoLoad);
 
     function editHandler({ target }) {
         setEditMode(!editMode);
         if (target.id === 'save-button') {
+            let form = document.forms['form-edit'];
             let request = {
                 token,
                 firstName:
-                    document.forms['form-edit'][
-                        'firstName-input'
-                    ].value.trim() ||
-                    document.forms['form-edit']['firstName-input'].placeholder,
+                    form['firstName-input'].value.trim() ||
+                    form['firstName-input'].placeholder,
                 lastName:
-                    document.forms['form-edit'][
-                        'lastName-input'
-                    ].value.trim() ||
-                    document.forms['form-edit']['lastName-input'].placeholder,
+                    form['lastName-input'].value.trim() ||
+                    form['lastName-input'].placeholder,
             };
             if (
                 firstName !== request.firstName ||
                 lastName !== request.lastName
             ) {
-                console.log(
-                    'validity',
-                    document.forms['form-edit'].checkValidity()
-                );
-                if (document.forms['form-edit'].checkValidity())
-                    update(request)
-                        .then(() => {
-                            dispatch({
-                                type: 'setProfileInfoLoad',
-                                payload: { profileInfoLoad: false },
-                            });
-                        })
-                        .then(() => profile());
+                if (form.checkValidity()) {
+                    update(request).then(() => {
+                        dispatch({
+                            type: 'setProfileInfoLoad',
+                            payload: { profileInfoLoad: false },
+                        });
+                        profile();
+                    });
+                }
             }
         }
     }
@@ -137,7 +131,12 @@ function Profile() {
         return (
             <main className="main bg-dark">
                 <div className="header">
-                    <h1>Loading ...</h1>
+                    <h1>
+                        Loading
+                        <span className="header_dot-1">. </span>
+                        <span className="header_dot-2">. </span>
+                        <span className="header_dot-3">. </span>
+                    </h1>
                 </div>
             </main>
         );

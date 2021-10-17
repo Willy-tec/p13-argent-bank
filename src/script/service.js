@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Redirect } from 'react-router';
 import { store } from './store';
 
 const URL = process.env.REACT_APP_BACKURL;
@@ -7,11 +6,11 @@ const URL_LOGIN = `${URL}/api/v1/user/login`;
 const URL_SIGNUP = `${URL}/api/v1/user/signup`;
 const URL_PROFILE = `${URL}/api/v1/user/profile`;
 
-async function login(body) {
-    console.log('call to axios login');
+async function login(data) {
     let response = {};
+
     await axios
-        .post(URL_LOGIN, body)
+        .post(URL_LOGIN, data)
         .then((res) => {
             response = {
                 status: res.data.status,
@@ -39,12 +38,11 @@ async function login(body) {
     return response;
 }
 
-async function signup(body) {
+async function signup(data) {
     let response = {};
-    console.log('call to axios signup');
 
     await axios
-        .post(URL_SIGNUP, body)
+        .post(URL_SIGNUP, data)
         .then((res) => {
             response = {
                 status: res.data.status,
@@ -52,12 +50,12 @@ async function signup(body) {
             };
         })
         .catch((error) => {
-            if (error.respone) {
+            if (error.response) {
                 response = {
                     status: error.response.data.status,
                     message: error.response.data.message,
                 };
-            }
+            } else response = error;
         });
     return response;
 }
@@ -65,7 +63,6 @@ async function signup(body) {
 async function profile() {
     let response = {};
     let token = getLocalToken();
-    console.log('call to axios profile with : ', token);
 
     const config = {
         headers: {
@@ -91,26 +88,27 @@ async function profile() {
                 type: 'setProfileInfoLoad',
                 payload: { profileInfoLoad: true },
             });
-            console.log(store.getState());
         })
         .catch((error) => {
-            console.log('error ocured in catch of profile axios request');
             store.dispatch({
                 type: 'setProfileInfoLoad',
                 payload: { profileInfoLoad: false },
+            });
+            store.dispatch({
+                type: 'setConnect',
+                payload: { connected: false },
             });
             if (error.respone) {
                 response = {
                     status: error.response.data.status,
                     message: error.response.data.message,
                 };
-            } else console.log(error);
+            } else response = error;
         });
     return response;
 }
 
 async function update(req) {
-    console.log('call to axios update');
     let token = getLocalToken();
 
     const config = {
@@ -140,7 +138,6 @@ function getLocalToken() {
 function clearAll() {
     window.localStorage.removeItem('token');
     store.dispatch({ type: 'clearAll' });
-    return <Redirect to="/" />;
 }
 
 export {

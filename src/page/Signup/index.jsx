@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Redirect } from 'react-router';
 
 function Signup() {
-    const [needRedirect, setNeedRedicte] = useState(false);
+    const [needRedirect, setNeedRedirect] = useState(false);
     function handleSubmit(target) {
         target.preventDefault();
         let body = {
@@ -13,14 +13,12 @@ function Signup() {
             firstName: document.forms[0].name.value,
             lastName: document.forms[0].lastname.value,
         };
-        console.log(body);
         if (document.forms[0].checkValidity())
             signup(body).then((response) => {
                 if (response.status === 200) {
-                    console.log('user create');
-                    setNeedRedicte(true);
-                } else if (response.status === 400)
-                    console.log('Error, user not found');
+                    setNeedRedirect(true);
+                } else if (response.status !== 200)
+                    console.log(response.message);
             });
     }
     if (needRedirect) return <Redirect to="/login" />;

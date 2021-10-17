@@ -17,10 +17,8 @@ function Login() {
             password: document.forms[0].password.value,
         };
         login(body).then((response) => {
-            if (response.status === 200) {
-                console.log('login');
-            } else if (response.status !== 200) {
-                console.log('Error, user not found', response);
+            if (response.status !== 200) {
+                console.log(response.message);
                 document.forms[0].lastChild.innerText = response.message; // ['error-text'].value = 'Salut';
                 setWaiting(false);
             }
@@ -63,5 +61,3 @@ function Login() {
 }
 
 export default Login;
-// TODO Effet pour la validation : user not found
-//TODO validation formulaire
