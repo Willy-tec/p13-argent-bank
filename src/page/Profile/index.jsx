@@ -51,9 +51,8 @@ function Profile() {
                 <div className="header">
                     {editMode ? (
                         <form id="form-edit">
-                            <h1>
-                                Welcome back
-                                <br />
+                            <h1>Welcome back</h1>
+                            <div>
                                 <input
                                     type="text"
                                     id="firstName-input"
@@ -70,7 +69,7 @@ function Profile() {
                                     pattern={'[A-Za-z]{2,}'}
                                     placeholder={`${lastName}`}
                                 />
-                            </h1>
+                            </div>
                             <button
                                 className="edit-button"
                                 onClick={editHandler}
