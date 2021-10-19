@@ -38,9 +38,11 @@ npm install
 npm start
 ```
 
+### Change backend url
+
 Setting the .env file : Follow the template with .env.example
 
-You need to setup the url you want to use for the back-end.
+You can setup the url you want to use for the back-end.
 
 You can use local server by cloning the repo : https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API
 
