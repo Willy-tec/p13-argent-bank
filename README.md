@@ -45,3 +45,12 @@ You need to setup the url you want to use for the back-end.
 You can use local server by cloning the repo : https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API
 
 and following their instruction, Or you can use my back-end from here : https://argentapi.herokuapp.com
+
+### Connecting as Tony stark
+
+Tony Stark
+
+    First Name: Tony
+    Last Name: Stark
+    Email: tony@stark.com
+    Password: password123
