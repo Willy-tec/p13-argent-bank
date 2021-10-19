@@ -27,3 +27,21 @@ If you want to clone the project, you need to setup the .env file with the backe
 -   react v17.0.2
 
 -   redux v4.1.1
+
+### Installation and running
+
+```
+git clone https://github.com/Willy-tec/p13-argent-bank.git
+
+npm install
+
+npm start
+```
+
+Setting the .env file : Follow the template with .env.example
+
+You need to setup the url you want to use for the back-end.
+
+You can use local server by cloning the repo : https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API
+
+and following their instruction, Or you can use my back-end from here : https://argentapi.herokuapp.com
