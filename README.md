@@ -1,6 +1,6 @@
 # ArgentBank
 
-![ArgentBankLogo](/src/argentBankLogo.png)
+![ArgentBankLogo](/src/img/argentBankLogo.png)
 
 ## Synopsis
 
