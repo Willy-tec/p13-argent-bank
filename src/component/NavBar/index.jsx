@@ -1,12 +1,12 @@
 import logo from '../../img/argentBankLogo.png';
 import './style.css';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { clearAll } from '../../script/service';
 
 function NavBar() {
     const isConnected = useSelector((state) => state.connected);
-    const location = useLocation();
+    const firstname = useSelector((state) => state.firstName);
     return (
         <>
             <nav className="main-nav">
@@ -21,25 +21,21 @@ function NavBar() {
                 <div>
                     {isConnected ? (
                         <>
-                            {location.pathname !== '/profile' ? (
-                                <Link className="main-nav-item" to="/profile">
-                                    Profile&nbsp;
-                                </Link>
-                            ) : (
-                                ''
-                            )}
+                            <Link className="main-nav-item" to="/profile">
+                                <i className="fa fa-user-circle">&nbsp;</i>
+                                {firstname}
+                            </Link>
                             <button
                                 className="main-nav-item"
                                 onClick={clearAll}
                             >
-                                <i className="fa fa-user-circle"></i>
-                                &nbsp;Sign Out
+                                Sign Out
                             </button>
                         </>
                     ) : (
                         <Link className="main-nav-item" to="/login">
-                            <i className="fa fa-user-circle"></i>
-                            &nbsp;Sign In
+                            <i className="fa fa-user-circle">&nbsp;</i>
+                            Sign In
                         </Link>
                     )}
                 </div>
