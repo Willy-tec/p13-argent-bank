@@ -25,10 +25,12 @@ function NavBar() {
                                 <i className="fa fa-user-circle">&nbsp;</i>
                                 {firstname}
                             </Link>
+
                             <button
                                 className="main-nav-item"
                                 onClick={clearAll}
                             >
+                                <i className="fa fa-sign-out">&nbsp;</i>
                                 Sign Out
                             </button>
                         </>
