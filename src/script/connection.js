@@ -17,6 +17,7 @@ async function manageConnection() {
             type: 'setConnect',
             payload: { connected: true },
         });
+        profile();
     }
 }
 
